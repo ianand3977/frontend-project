@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Management</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .compartment {
+        border: 2px solid #ccc;
+        padding: 20px;
+        width: 200px;
+        height: 300px;
+        overflow-y: auto;
+    }
+
+    .square {
+        width: 50px;
+        height: 50px;
+        background-color: #3498db;
+        margin-bottom: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .plus {
+        font-size: 24px;
+        color: #333;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+    <div>
+        <h2>Not Started</h2>
+        <div class="compartment" id="a1" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <button onclick="addSquare('a1')">Add New</button>
+        </div>
+    </div>
+    <div>
+        <h2>In Progress</h2>
+        <div class="compartment" id="a2" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <button onclick="addSquare('a2')">Add New</button>
+        </div>
+    </div>
+    <div>
+        <h2>Completed</h2>
+        <div class="compartment" id="a3" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <button onclick="addSquare('a3')">Add New</button>
+        </div>
+    </div>
+
+    <script>
+        var squareCounter = 1;
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            var target = ev.target;
+            if (target.classList.contains('compartment')) {
+                target.appendChild(document.getElementById(data));
+            }
+        }
+
+        function addSquare(compartmentId) {
+            var squareId = 'box' + squareCounter++;
+            var square = document.createElement('div');
+            square.className = 'square';
+            square.draggable = true;
+            square.id = squareId;
+            square.textContent = squareId; // Display the ID on the square
+            square.setAttribute('onclick', 'openSquareDetails("' + squareId + '")');
+            square.setAttribute('ondragstart', 'drag(event)');
+            document.getElementById(compartmentId).appendChild(square);
+        }
+
+        function openSquareDetails(squareId) {
+            // Redirect to new page with square ID
+            window.location.href = "square_details.html?id=" + squareId;
+        }
+    </script>
+</body>
+</html>
